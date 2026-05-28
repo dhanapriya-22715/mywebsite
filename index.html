@@ -1,13 +1,244 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>mywebsite</title>
+    <title>AgroAI Assistant</title>
+    <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
+    <main class="app-shell" aria-label="AgroAI mobile website">
+      <section class="screen active" id="home-screen" data-screen="home">
+        <header class="topbar">
+          <div>
+            <p class="eyebrow">Today · Partly cloudy</p>
+            <h1>AgroAI</h1>
+          </div>
+          <button class="icon-button" type="button" aria-label="Notifications">🔔</button>
+        </header>
+
+        <article class="weather-card">
+          <div>
+            <p>Today · Partly cloudy</p>
+            <strong>29°</strong>
+            <span>/ 22°</span>
+            <small>60% rain · 12 km/h</small>
+          </div>
+          <div class="weather-icon" aria-hidden="true">☼</div>
+          <p class="weather-note">AI: Rain expected tonight. Plan irrigation carefully.</p>
+        </article>
+
+        <div class="mini-grid">
+          <article class="mini-card">
+            <span class="mini-icon">↗</span>
+            <p>Crop Health</p>
+            <strong>Good</strong>
+          </article>
+          <article class="mini-card">
+            <span class="mini-icon">◌</span>
+            <p>Soil Moisture</p>
+            <strong>48%</strong>
+          </article>
+        </div>
+
+        <section class="content-block">
+          <h2>AI Recommendations</h2>
+          <button class="list-card" type="button" data-open-tool="irrigation">
+            <span>💧</span>
+            <div>
+              <strong>Irrigation Advice</strong>
+              <p>Skip irrigation today. Soil moisture sufficient.</p>
+            </div>
+          </button>
+          <button class="list-card" type="button" data-open-tool="fertilizer">
+            <span>⚗</span>
+            <div>
+              <strong>Organic Fertilizer</strong>
+              <p>Apply vermicompost 200 kg/acre this week.</p>
+            </div>
+          </button>
+          <button class="list-card" type="button" data-open-tool="market">
+            <span>₹</span>
+            <div>
+              <strong>Market Update</strong>
+              <p>Paddy prices are up 3.2% in nearby markets.</p>
+            </div>
+          </button>
+        </section>
+      </section>
+
+      <section class="screen" id="market-screen" data-screen="market">
+        <header class="topbar">
+          <div>
+            <p class="eyebrow">Local mandi insights</p>
+            <h1>Market</h1>
+          </div>
+          <button class="icon-button" type="button" aria-label="Refresh prices">↻</button>
+        </header>
+
+        <section class="content-block">
+          <h2>Crop Prices</h2>
+          <article class="price-card">
+            <div>
+              <strong>Paddy</strong>
+              <p>Nearby wholesale average</p>
+            </div>
+            <span>₹2,180/q</span>
+          </article>
+          <article class="price-card">
+            <div>
+              <strong>Tomato</strong>
+              <p>High demand this week</p>
+            </div>
+            <span>₹34/kg</span>
+          </article>
+          <article class="price-card">
+            <div>
+              <strong>Cotton</strong>
+              <p>Stable movement</p>
+            </div>
+            <span>₹7,050/q</span>
+          </article>
+        </section>
+
+        <section class="content-block">
+          <h2>Sell Recommendation</h2>
+          <article class="soft-panel">
+            <strong>Hold paddy for 3-5 days</strong>
+            <p>Short-term demand is improving. Expected gain: 2% to 4%.</p>
+          </article>
+        </section>
+      </section>
+
+      <section class="screen" id="voice-screen" data-screen="voice">
+        <div class="voice-stage">
+          <button class="mic-button" id="mic-button" type="button" aria-label="Start voice assistant">🎙</button>
+          <h1 id="voice-title">Listening... speak now</h1>
+          <p id="voice-subtitle">Tap microphone to simulate a voice query.</p>
+          <div class="wave" aria-hidden="true">
+            <span></span><span></span><span></span><span></span><span></span>
+            <span></span><span></span><span></span><span></span><span></span>
+          </div>
+        </div>
+
+        <section class="content-block">
+          <h2>Recent Conversations</h2>
+          <article class="chat user">When should I water my tomato field?</article>
+          <article class="chat bot">Based on today's rain forecast, skip irrigation for 2 days.</article>
+          <article class="chat user">What fertilizer for paddy this week?</article>
+          <article class="chat bot">Apply 200 kg vermicompost per acre before predicted rain.</article>
+        </section>
+      </section>
+
+      <section class="screen" id="tools-screen" data-screen="tools">
+        <header class="topbar">
+          <div>
+            <p class="eyebrow">Planning tools</p>
+            <h1>Agro Tools</h1>
+          </div>
+        </header>
+
+        <section class="content-block">
+          <h2>Yield Prediction</h2>
+          <form class="calculator" id="yield-form">
+            <label>
+              Farm Size (acre)
+              <input type="number" id="farm-size" value="1" min="0.1" step="0.1" />
+            </label>
+            <label>
+              Crop
+              <select id="crop-select">
+                <option value="paddy">Paddy</option>
+                <option value="cotton">Cotton</option>
+                <option value="tomato">Tomato</option>
+                <option value="maize">Maize</option>
+              </select>
+            </label>
+            <label>
+              Expected Rainfall
+              <input type="range" id="rainfall" min="10" max="100" value="60" />
+            </label>
+          </form>
+
+          <div class="result-grid">
+            <article class="result-card">
+              <span>🌾</span>
+              <p>Predicted Yield</p>
+              <strong id="yield-output">8,118 kg</strong>
+            </article>
+            <article class="result-card">
+              <span>₹</span>
+              <p>Income</p>
+              <strong id="income-output">₹1,78,596</strong>
+            </article>
+          </div>
+        </section>
+
+        <section class="content-block">
+          <h2>Organic Fertilizer Suggestions</h2>
+          <article class="list-card static">
+            <span>⚗</span>
+            <div>
+              <strong>Vermicompost</strong>
+              <p>200 kg / acre, 2 weeks before sowing.</p>
+            </div>
+          </article>
+          <article class="list-card static">
+            <span>☘</span>
+            <div>
+              <strong>Green Manure</strong>
+              <p>Plough into soil at flowering stage.</p>
+            </div>
+          </article>
+          <article class="list-card static">
+            <span>🛡</span>
+            <div>
+              <strong>Neem Oil Spray</strong>
+              <p>5 ml/l water, weekly pest prevention.</p>
+            </div>
+          </article>
+        </section>
+      </section>
+
+      <section class="screen" id="more-screen" data-screen="more">
+        <header class="topbar">
+          <div>
+            <p class="eyebrow">Tools and settings</p>
+            <h1>More</h1>
+          </div>
+        </header>
+
+        <section class="dark-panel">
+          <h2>Tools</h2>
+          <button class="dark-row" type="button" data-jump="tools">Crop Recommendation <span>›</span></button>
+          <button class="dark-row" type="button" data-jump="tools">Organic Fertilizer <span>›</span></button>
+          <button class="dark-row" type="button" data-jump="tools">Yield Prediction <span>›</span></button>
+          <button class="dark-row" type="button">Pest & Disease Scan <span>›</span></button>
+          <button class="dark-row" type="button">Government Schemes <span>›</span></button>
+        </section>
+
+        <section class="dark-panel">
+          <h2>Settings</h2>
+          <label class="dark-row switch-row">
+            Dark Mode
+            <input type="checkbox" id="theme-toggle" />
+          </label>
+          <button class="dark-row" type="button">Language <span>English</span></button>
+          <button class="dark-row" type="button">Notifications <span>On</span></button>
+          <button class="dark-row" type="button">Offline Mode <span>Auto</span></button>
+        </section>
+      </section>
+
+      <button class="fab" type="button" data-tab="voice" aria-label="Open assistant">⌘</button>
+
+      <nav class="bottom-nav" aria-label="Main navigation">
+        <button class="nav-item active" type="button" data-tab="home"><span>⌂</span>Home</button>
+        <button class="nav-item" type="button" data-tab="market"><span>⌁</span>Market</button>
+        <button class="nav-item" type="button" data-tab="voice"><span>🎙</span>Voice</button>
+        <button class="nav-item" type="button" data-tab="more"><span>☰</span>More</button>
+      </nav>
+    </main>
+
+    <script src="script.js"></script>
   </body>
 </html>
